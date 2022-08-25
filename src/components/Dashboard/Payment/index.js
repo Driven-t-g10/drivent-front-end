@@ -20,7 +20,7 @@ export const Instructions = styled.p`
   margin-bottom: 17px;
 `;
 
-export const Option = styled.div`
+export const Option = styled.button`
   display: flex;
   flex-direction: column;
   align-items: center;
