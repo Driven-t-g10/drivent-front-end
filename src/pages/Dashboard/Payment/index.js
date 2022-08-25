@@ -1,62 +1,97 @@
-import { useState, useEffect } from 'react';
-import { Title, Instructions, Option, OptionsContainer } from '../../../components/Dashboard/Payment';
-import useGetTicket from '../../../hooks/api/useGetTicket';
-import { useForm } from '../../../hooks/useForm';
-import useSaveUserTicket from '../../../hooks/api/useSaveUserTicket';
 import { toast } from 'react-toastify';
-import { ErrorMsg } from '../../../components/PersonalInformationForm/ErrorMsg';
+import { useState, useEffect } from 'react';
+import { Title, Instructions, Option, OptionsContainer, Confirmation } from '../../../components/Dashboard/Payment';
+import Button from '../../../components/Button';
+import FormValidations from '../../../components/Dashboard/Payment/FormValidations';
+
+import { useForm } from '../../../hooks/useForm';
+import useGetTicket from '../../../hooks/api/useGetTicket';
+import useGetUserTicket from '../../../hooks/api/useGetUserTicket';
+import useSaveUserTicket from '../../../hooks/api/useSaveUserTicket';
 
 export default function Payment() {
   const [tickets, setTickets] = useState([]);
-  // const [chosenTicket, setChosenTicket] = useState();
-  const { getTicket } = useGetTicket();
-  const { saveUserTicketLoading, saveUserTicket } = useSaveUserTicket();
 
-  const { handleSubmit, handleChange, data, errors } = useForm({
-    validations: {},
+  const { getTicket } = useGetTicket();
+  const { getUserTicket } = useGetUserTicket();
+  const { saveUserTicket } = useSaveUserTicket();
+
+  const { handleSubmit, data, setData } = useForm({
+    validations: FormValidations,
 
     // eslint-disable-next-line space-before-function-paren
     onSubmit: async (data) => {
       const newData = {
         ticketId: data.ticketId,
+        hasHotel: data.hasHotel,
       };
 
       try {
         await saveUserTicket(newData);
-        toast('Escolha salvas com sucesso!');
+        toast('Seleções salvas com sucesso!');
       } catch (err) {
-        toast('Não foi possível escolher este ticket, erro no sistema!');
+        toast('Não foi possível salvar sua seleção!');
       }
     },
 
     initialValues: {
       ticketId: '',
+      hasHotel: false,
     },
   });
 
+  function handleChosen(name, value) {
+    return () => {
+      setData({ ...data, [name]: value });
+    };
+  }
+
+  function handleConfirmation() {
+    let ticket = tickets.find((ticket) => ticket.id === data.ticketId);
+
+    if (data.hasHotel) {
+      // procurar o valor do hotel
+    }
+
+    const value = ticket.price; // + hotelPrice;
+
+    return (
+      <Confirmation>
+        <Instructions>
+          Fechado! O total ficou em <span>R$ ${value}</span>. Agora é só confirmar
+        </Instructions>
+        <Button onClick={handleSubmit}>RESERVAR INGRESSO</Button>
+      </Confirmation>
+    );
+  }
+
   useEffect(() => {
     getTicket().then((response) => setTickets(response));
+    getUserTicket().then((response) =>
+      setData({
+        ticketId: response.ticketId || '',
+        hasHotel: response.hasHotel || false,
+      })
+    );
   }, []);
+
   return (
     <>
       <Title>Ingresso e pagamento</Title>
       <Instructions>Primeiro, escolha sua modalidade de ingresso</Instructions>
-      {errors.name && <ErrorMsg>{errors.name}</ErrorMsg>}
       <OptionsContainer>
         {tickets.map((ticket) => (
           <Option
             key={ticket.id}
             chosen={data.ticketId === ticket.id ? true : false}
-            name="ticketId"
-            onClick={() => handleChange('ticketId')}
-            disabled={saveUserTicketLoading}
-            onDoubleClick={handleSubmit}
+            onClick={handleChosen('ticketId', ticket.id)}
           >
             <h1>{ticket.name}</h1>
             <p>R$ {ticket.price}</p>
           </Option>
         ))}
       </OptionsContainer>
+      {data.ticketId && handleConfirmation()}
     </>
   );
 }

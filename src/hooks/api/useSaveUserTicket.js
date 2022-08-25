@@ -1,7 +1,7 @@
 import useAsync from '../useAsync';
 import useToken from '../useToken';
 
-import * as userTicketApi from '../../services/useTicketApi';
+import * as userTicketApi from './../../services/userTicketApi';
 
 export default function useSaveUserTicket() {
   const token = useToken();
@@ -10,7 +10,7 @@ export default function useSaveUserTicket() {
     loading: saveUserTicketLoading,
     error: saveUserTicketError,
     act: saveUserTicket,
-  } = useAsync((data) => userTicketApi.save(data, token), false);
+  } = useAsync((data) => userTicketApi.saveUserTicket(data, token), false);
 
   return {
     saveUserTicketLoading,
