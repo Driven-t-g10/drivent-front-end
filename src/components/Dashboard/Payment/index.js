@@ -57,7 +57,9 @@ export const OptionsContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  margin-bottom: 44px;
 `;
+
 export const Alert = styled.p`
   font-family: 'Roboto, sans-serif';
   font-style: normal;

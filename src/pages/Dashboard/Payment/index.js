@@ -1,6 +1,5 @@
 import { toast } from 'react-toastify';
-import { useState, useEffect, useContext } from 'react';
-import UserContext from '../../../contexts/UserContext';
+import { useState, useEffect } from 'react';
 import {
   Title,
   Instructions,
@@ -22,8 +21,10 @@ export default function Payment() {
   const { getTicket } = useGetTicket();
   const { getUserTicket } = useGetUserTicket();
   const { saveUserTicket } = useSaveUserTicket();
-  const { userData } = useContext(UserContext);
   const [userEnrolled, setUserEnrolled] = useState(true);
+  const [hotelOptions, setHotelOptions] = useState(false);
+  const [confirmation, setConfirmation] = useState(false);
+  const [chosenTicket, setChosenTicket] = useState({});
 
   const { handleSubmit, data, setData } = useForm({
     validations: FormValidations,
@@ -49,20 +50,38 @@ export default function Payment() {
     },
   });
 
-  function handleChosen(name, value) {
+  function handleChosen(id = null, value = null) {
     return () => {
-      setData({ ...data, [name]: value });
+      if (id) {
+        let ticket = tickets.find((ticket) => ticket.id === id);
+        setChosenTicket(ticket);
+        if (ticket.hotelPrice > 0) {
+          setHotelOptions(true);
+          setConfirmation(false);
+        } else {
+          setHotelOptions(false);
+          setConfirmation(true);
+        }
+        setData({ ...data, ticketId: id });
+      }
+      if (value !== null) {
+        if (value > 0) {
+          setData({ ...data, hasHotel: true });
+        } else {
+          setData({ ...data, hasHotel: false });
+        }
+        setConfirmation(true);
+      }
     };
   }
 
   function handleConfirmation() {
-    let ticket = tickets.find((ticket) => ticket.id === data.ticketId);
-
+    let value;
     if (data.hasHotel) {
-      // procurar o valor do hotel
+      value = chosenTicket.price + chosenTicket.hotelPrice;
+    } else {
+      value = chosenTicket.price;
     }
-
-    const value = ticket.price; // + hotelPrice;
 
     return (
       <Confirmation>
@@ -102,14 +121,32 @@ export default function Payment() {
               <Option
                 key={ticket.id}
                 chosen={data.ticketId === ticket.id ? true : false}
-                onClick={handleChosen('ticketId', ticket.id)}
+                onClick={handleChosen(ticket.id)}
               >
                 <h1>{ticket.name}</h1>
                 <p>R$ {ticket.price}</p>
               </Option>
             ))}
           </OptionsContainer>
-          {data.ticketId && handleConfirmation()}
+          {hotelOptions ? (
+            <>
+              <Instructions>Ótimo! Agora escolha sua modalidade de hospedagem</Instructions>
+              <OptionsContainer>
+                <Option chosen={!data.hasHotel && confirmation ? true : false} onClick={handleChosen(null, 0)}>
+                  <h1>Sem Hotel</h1>
+                  <p>R$ 0</p>
+                </Option>
+                <Option
+                  chosen={data.hasHotel && confirmation ? true : false}
+                  onClick={handleChosen(null, chosenTicket.hotelPrice)}
+                >
+                  <h1>Com Hotel</h1>
+                  <p>R$ {chosenTicket.hotelPrice}</p>
+                </Option>
+              </OptionsContainer>
+            </>
+          ) : null}
+          {confirmation ? handleConfirmation() : null}
         </>
       ) : (
         <Alert>Você precisa completar sua inscrição antes de prosseguir pra escolha de ingresso</Alert>
