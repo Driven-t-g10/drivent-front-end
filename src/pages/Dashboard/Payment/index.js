@@ -16,6 +16,8 @@ import useGetTicket from '../../../hooks/api/useGetTicket';
 import useGetUserTicket from '../../../hooks/api/useGetUserTicket';
 import useSaveUserTicket from '../../../hooks/api/useSaveUserTicket';
 
+import CheckoutPage from './CheckoutPage';
+
 export default function Payment() {
   const [tickets, setTickets] = useState([]);
   const { getTicket } = useGetTicket();
@@ -25,6 +27,7 @@ export default function Payment() {
   const [hotelOptions, setHotelOptions] = useState(false);
   const [confirmation, setConfirmation] = useState(false);
   const [chosenTicket, setChosenTicket] = useState({});
+  const [booked, setBooked] = useState(false);
 
   const { handleSubmit, data, setData } = useForm({
     validations: FormValidations,
@@ -39,6 +42,7 @@ export default function Payment() {
       try {
         await saveUserTicket(newData);
         toast('Seleções salvas com sucesso!');
+        setBooked(true);
       } catch (err) {
         toast('Não foi possível salvar sua seleção!');
       }
@@ -94,23 +98,31 @@ export default function Payment() {
   }
 
   useEffect(() => {
-    const tickets = getTicket();
-    tickets.then((response) => setTickets(response));
-    tickets.catch((error) => {
+    const promise = getTicket();
+    promise.then((ticketsArr) => {
+      setTickets(ticketsArr);
+      getUserTicket().then((response) => {
+        setData({
+          ticketId: response.ticketId || '',
+          hasHotel: response.hasHotel || false,
+        });
+        if (response.userTicket) {
+          const ticket = ticketsArr.find((ticket) => ticket.id === response.userTicket.ticketId);
+          setChosenTicket(ticket);
+          setBooked(true);
+        }
+      });
+    });
+    promise.catch((error) => {
       if (error.response.status === 404) {
         setUserEnrolled(false);
       }
     });
-
-    getUserTicket().then((response) =>
-      setData({
-        ticketId: response.ticketId || '',
-        hasHotel: response.hasHotel || false,
-      })
-    );
   }, []);
 
-  return (
+  return booked ? (
+    <CheckoutPage chosenTicket={chosenTicket} hasHotel={data.hasHotel} />
+  ) : (
     <>
       <Title>Ingresso e pagamento</Title>
       {userEnrolled ? (
