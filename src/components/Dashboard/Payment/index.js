@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Title = styled.h1`
-  font-family: 'Roboto, sans-serif';
+  font-family: 'Roboto', sans-serif, sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 34px;
@@ -11,7 +11,7 @@ export const Title = styled.h1`
 `;
 
 export const Instructions = styled.p`
-  font-family: 'Roboto, sans-serif';
+  font-family: 'Roboto', sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 20px;
@@ -20,7 +20,7 @@ export const Instructions = styled.p`
   margin-bottom: 17px;
 `;
 
-export const Option = styled.div`
+export const Option = styled.button`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -58,7 +58,6 @@ export const OptionsContainer = styled.div`
   flex-direction: row;
   align-items: center;
 `;
-
 export const Alert = styled.p`
   font-family: 'Roboto, sans-serif';
   font-style: normal;
@@ -70,4 +69,21 @@ export const Alert = styled.p`
   width: 388px;
   margin: 0 auto;
   margin-top: 205px;
+`;
+export const Confirmation = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+
+  margin-top: 20px;
+
+  p > span {
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 23px;
+    color: #4e4e4e;
+    margin-bottom: 17px;
+  }
 `;
