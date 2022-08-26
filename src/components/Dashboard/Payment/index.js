@@ -33,7 +33,7 @@ export const Option = styled.button`
   margin-right: 24px;
   cursor: pointer;
   h1 {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Roboto, sans-serif';
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
@@ -43,7 +43,7 @@ export const Option = styled.button`
     margin-bottom: 3px;
   }
   p {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Roboto, sans-serif';
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -57,8 +57,21 @@ export const OptionsContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  margin-bottom: 44px;
 `;
 
+export const Alert = styled.p`
+  font-family: 'Roboto, sans-serif';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 23px;
+  text-align: center;
+  color: #8e8e8e;
+  width: 388px;
+  margin: 0 auto;
+  margin-top: 205px;
+`;
 export const Confirmation = styled.div`
   display: flex;
   flex-direction: column;
