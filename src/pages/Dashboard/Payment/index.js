@@ -104,7 +104,9 @@ export default function Payment() {
       getUserTicket().then((response) => {
         setData({
           ticketId: response.ticketId || '',
-          hasHotel: response.hasHotel || false,
+          hasHotel: response.userTicket.hasHotel || false,
+          isPaid: response.userTicket.isPaid || false,
+          id: response.userTicket.id,
         });
         if (response.userTicket) {
           const ticket = ticketsArr.find((ticket) => ticket.id === response.userTicket.ticketId);
@@ -121,7 +123,7 @@ export default function Payment() {
   }, []);
 
   return booked ? (
-    <CheckoutPage chosenTicket={chosenTicket} hasHotel={data.hasHotel} />
+    <CheckoutPage chosenTicket={chosenTicket} hasHotel={data.hasHotel} isPaid={data.isPaid} id={data.id} />
   ) : (
     <>
       <Title>Ingresso e pagamento</Title>

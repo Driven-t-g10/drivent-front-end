@@ -1,7 +1,11 @@
+import { AiFillCheckCircle } from 'react-icons/ai';
+
+import CreditCardForm from '../../../components/CreditCardForm';
 import { Title, Instructions, Option, OptionsContainer } from '../../../components/Dashboard/Payment';
 
 export default function CheckoutPage(props) {
-  const { chosenTicket, hasHotel } = props;
+  const { chosenTicket, hasHotel, isPaid, id } = props;
+
   let ticketName;
   let ticketPrice = chosenTicket.price;
   if (!hasHotel && chosenTicket.hotelPrice > 0) {
@@ -23,6 +27,14 @@ export default function CheckoutPage(props) {
           <p>R$ {ticketPrice}</p>
         </Option>
       </OptionsContainer>
+      <Instructions>Pagamento</Instructions>
+      {isPaid ? (
+        <>
+          <AiFillCheckCircle />
+        </>
+      ) : (
+        <CreditCardForm id={id} />
+      )}
     </>
   );
 }
