@@ -1,4 +1,5 @@
 import { AiFillCheckCircle } from 'react-icons/ai';
+import styled from 'styled-components';
 
 import CreditCardForm from '../../../components/CreditCardForm';
 import { Title, Instructions, Option, OptionsContainer } from '../../../components/Dashboard/Payment';
@@ -29,12 +30,40 @@ export default function CheckoutPage(props) {
       </OptionsContainer>
       <Instructions>Pagamento</Instructions>
       {isPaid ? (
-        <>
+        <Container>
           <AiFillCheckCircle />
-        </>
+          <div>
+            <p>
+              <span>Pagamento confirmado com sucesso!</span>
+            </p>
+            <p>Prossiga para escolha de hospedagem e atividades</p>
+          </div>
+        </Container>
       ) : (
         <CreditCardForm id={id} />
       )}
     </>
   );
 }
+
+const Container = styled.section`
+  display: flex;
+  align-items: center;
+
+  svg {
+    font-size: 48px;
+    color: #36b853;
+  }
+
+  div {
+    margin-left: 15px;
+  }
+
+  div p {
+    line-height: 18px;
+  }
+
+  div p span {
+    font-weight: 700;
+  }
+`;
