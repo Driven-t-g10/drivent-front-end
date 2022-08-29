@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 import validations from '../Dashboard/Payment/CreditCardFormValidations';
 import useUpdateUserTicketPayment from '../../hooks/api/useUpdateUserTicketPayment';
 
-export default function CreditCardForm({ id }) {
+export default function CreditCardForm({ id, setIsPaid }) {
   const { updateUserTicketPayment } = useUpdateUserTicketPayment();
   const { handleSubmit, handleChange, data, errors } = useForm({
     validations: validations,
@@ -26,6 +26,7 @@ export default function CreditCardForm({ id }) {
       try {
         await updateUserTicketPayment(id);
         toast('Pagamento efetuado com sucesso!');
+        setIsPaid(true);
       } catch (e) {
         toast('Não foi possível efeturar o pagamento!');
       }

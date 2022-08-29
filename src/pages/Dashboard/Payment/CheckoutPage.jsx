@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { AiFillCheckCircle } from 'react-icons/ai';
 import styled from 'styled-components';
 
@@ -5,7 +6,8 @@ import CreditCardForm from '../../../components/CreditCardForm';
 import { Title, Instructions, Option, OptionsContainer } from '../../../components/Dashboard/Payment';
 
 export default function CheckoutPage(props) {
-  const { chosenTicket, hasHotel, isPaid, id } = props;
+  const { chosenTicket, hasHotel, id } = props;
+  const [isPaid, setIsPaid] = useState(props.isPaid);
 
   let ticketName;
   let ticketPrice = chosenTicket.price;
@@ -40,7 +42,7 @@ export default function CheckoutPage(props) {
           </div>
         </Container>
       ) : (
-        <CreditCardForm id={id} />
+        <CreditCardForm id={id} setIsPaid={setIsPaid} />
       )}
     </>
   );
