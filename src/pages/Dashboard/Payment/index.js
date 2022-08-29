@@ -105,8 +105,8 @@ export default function Payment() {
         setData({
           ticketId: response.ticketId || '',
           hasHotel: response.userTicket.hasHotel || false,
-          isPaid: response.userTicket.isPaid || false,
-          id: response.userTicket.id,
+          isPaid: response.userTicket?.isPaid || false,
+          id: response.userTicket?.id || null,
         });
         if (response.userTicket) {
           const ticket = ticketsArr.find((ticket) => ticket.id === response.userTicket.ticketId);
@@ -120,7 +120,7 @@ export default function Payment() {
         setUserEnrolled(false);
       }
     });
-  }, []);
+  }, [booked]);
 
   return booked ? (
     <CheckoutPage chosenTicket={chosenTicket} hasHotel={data.hasHotel} isPaid={data.isPaid} id={data.id} />
