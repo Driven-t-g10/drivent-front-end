@@ -11,3 +11,8 @@ export async function getUserTicket(token) {
   const response = await promise;
   return response.data;
 }
+
+export async function updateUserTicketPayment(id, token) {
+  const response = await api.patch(`user-ticket/payment/${id}`, {}, parseToken(token));
+  return response.data;
+}
