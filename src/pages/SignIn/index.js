@@ -13,12 +13,14 @@ import EventInfoContext from '../../contexts/EventInfoContext';
 import UserContext from '../../contexts/UserContext';
 
 import useSignIn from '../../hooks/api/useSignIn';
+import useGithubAuthorization from '../../hooks/api/useGithubAuthorization';
 
 export default function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const { loadingSignIn, signIn } = useSignIn();
+  const { LoadingGithub, loginOrRegisterGithub } = useGithubAuthorization();
 
   const { eventInfo } = useContext(EventInfoContext);
   const { setUserData } = useContext(UserContext);
@@ -55,10 +57,21 @@ export default function SignIn() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <Button type="submit" color="primary" fullWidth disabled={loadingSignIn}>
+          <Button type="submit" color="primary" fullWidth disabled={loadingSignIn || LoadingGithub}>
             Entrar
           </Button>
         </form>
+      </Row>
+      <Row>
+        <label>Ou</label>
+        <Button
+          color="secodary"
+          onClick={() => loginOrRegisterGithub()}
+          fullWidth
+          disabled={loadingSignIn || LoadingGithub}
+        >
+          Entrar com GitHub
+        </Button>
       </Row>
       <Row>
         <Link to="/enroll">Não possui login? Inscreva-se</Link>
