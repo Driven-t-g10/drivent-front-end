@@ -15,7 +15,7 @@ export default function Countdown() {
 
   useEffect(() => {
     if (countdownOver) {
-      navigate('/enroll');
+      navigate('/sign-in');
     }
   }, [countdownOver]);
 

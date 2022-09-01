@@ -1,9 +1,4 @@
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate
-} from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
 import Countdown from './pages/Countdown';
@@ -30,8 +25,8 @@ export default function App() {
           <Router>
             <Routes>
               <Route path="/" element={<Countdown />} />
-              <Route path="/enroll" element={<Enroll />} />
               <Route path="/sign-in" element={<SignIn />} />
+              <Route path="/enroll" element={<Enroll />} />
 
               <Route
                 path="/dashboard"
@@ -63,7 +58,5 @@ function ProtectedRouteGuard({ children }) {
     return <Navigate to="/sign-in" />;
   }
 
-  return <>
-    {children}
-  </>;
+  return <>{children}</>;
 }

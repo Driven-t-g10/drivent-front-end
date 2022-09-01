@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,12 +13,17 @@ import EventInfoContext from '../../contexts/EventInfoContext';
 import UserContext from '../../contexts/UserContext';
 
 import useSignIn from '../../hooks/api/useSignIn';
+import useGithubAuthorization from '../../hooks/api/useGithubAuthorization';
+import useLoginOrRegisterOauth from '../../hooks/api/useLoginOrRegisterOauth';
+import qs from 'query-string';
 
 export default function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const { loadingSignIn, signIn } = useSignIn();
+  const { authenticationGithub } = useGithubAuthorization();
+  const { LoadingGithub, loginOrRegisterOauth } = useLoginOrRegisterOauth();
 
   const { eventInfo } = useContext(EventInfoContext);
   const { setUserData } = useContext(UserContext);
@@ -38,6 +43,21 @@ export default function SignIn() {
     }
   }
 
+  // eslint-disable-next-line space-before-function-paren
+  useEffect(async () => {
+    const { code } = qs.parseUrl(window.location.href).query;
+    if (!code) return;
+
+    try {
+      const userData = await loginOrRegisterOauth(code);
+      setUserData(userData);
+      navigate('/dashboard');
+      toast('Login realizado com sucesso!');
+    } catch (error) {
+      toast('Não foi possível fazer o login!');
+    }
+  }, []);
+
   return (
     <AuthLayout background={eventInfo.backgroundImageUrl}>
       <Row>
@@ -55,10 +75,21 @@ export default function SignIn() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <Button type="submit" color="primary" fullWidth disabled={loadingSignIn}>
+          <Button type="submit" color="primary" fullWidth disabled={loadingSignIn || LoadingGithub}>
             Entrar
           </Button>
         </form>
+      </Row>
+      <Row>
+        <label>Ou</label>
+        <Button
+          color="secodary"
+          onClick={() => authenticationGithub()}
+          fullWidth
+          disabled={loadingSignIn || LoadingGithub}
+        >
+          Entrar com GitHub
+        </Button>
       </Row>
       <Row>
         <Link to="/enroll">Não possui login? Inscreva-se</Link>
