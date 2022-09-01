@@ -6,12 +6,12 @@ export default function useGithubAuthorization() {
   const {
     loading: LoadingGithub,
     error: ErrorGithub,
-    act: loginOrRegisterGithub,
+    act: authenticationGithub,
   } = useAsync(authApi.githubAuthorization, false);
 
   return {
     LoadingGithub,
     ErrorGithub,
-    loginOrRegisterGithub,
+    authenticationGithub,
   };
 }

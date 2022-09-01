@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
@@ -14,13 +14,16 @@ import UserContext from '../../contexts/UserContext';
 
 import useSignIn from '../../hooks/api/useSignIn';
 import useGithubAuthorization from '../../hooks/api/useGithubAuthorization';
+import useLoginOrRegisterOauth from '../../hooks/api/useLoginOrRegisterOauth';
+import qs from 'query-string';
 
 export default function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const { loadingSignIn, signIn } = useSignIn();
-  const { LoadingGithub, loginOrRegisterGithub } = useGithubAuthorization();
+  const { authenticationGithub } = useGithubAuthorization();
+  const { LoadingGithub, loginOrRegisterOauth } = useLoginOrRegisterOauth();
 
   const { eventInfo } = useContext(EventInfoContext);
   const { setUserData } = useContext(UserContext);
@@ -39,6 +42,21 @@ export default function SignIn() {
       toast('Não foi possível fazer o login!');
     }
   }
+
+  // eslint-disable-next-line space-before-function-paren
+  useEffect(async () => {
+    const { code } = qs.parseUrl(window.location.href).query;
+    if (!code) return;
+
+    try {
+      const userData = await loginOrRegisterOauth(code);
+      setUserData(userData);
+      navigate('/dashboard');
+      toast('Login realizado com sucesso!');
+    } catch (error) {
+      toast('Não foi possível fazer o login!');
+    }
+  }, []);
 
   return (
     <AuthLayout background={eventInfo.backgroundImageUrl}>
@@ -66,7 +84,7 @@ export default function SignIn() {
         <label>Ou</label>
         <Button
           color="secodary"
-          onClick={() => loginOrRegisterGithub()}
+          onClick={() => authenticationGithub()}
           fullWidth
           disabled={loadingSignIn || LoadingGithub}
         >

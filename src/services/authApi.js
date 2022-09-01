@@ -6,6 +6,11 @@ export async function signIn(email, password) {
   return response.data;
 }
 
+export async function signOauth(code) {
+  const response = await api.post(`/auth/oauth/${code}`);
+  return response.data;
+}
+
 export async function githubAuthorization() {
   const GITHUB_AUTH_URL = 'https://github.com/login/oauth/authorize';
   const params = {
