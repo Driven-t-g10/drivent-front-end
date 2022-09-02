@@ -4,7 +4,7 @@ import useGetHotel from '../../../../hooks/api/useGetHotel';
 
 import { HotelOption, OptionsContainer } from '../index';
 import { Instructions } from '../../Payment';
-import Rooms from '../../../../pages/Dashboard/Hotel/Rooms';
+import Rooms from '../HotelRooms.js/Rooms';
 
 export default function HotelForm({ setBooked }) {
   const [hotels, setHotels] = useState([]);

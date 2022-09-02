@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Instructions, RoomsContainer, RoomContainer, ConfirmationButton } from '../../../components/Dashboard/Hotel';
+import { Instructions, RoomsContainer, RoomContainer, ConfirmationButton } from '..';
 import { Container, Row, Col } from 'react-grid-system';
-import useGetRooms from '../../../hooks/api/useGetRooms';
-import useConfirmReservation from '../../../hooks/api/useConfirmReservation';
+import useGetRooms from '../../../../hooks/api/useGetRooms';
+import useConfirmReservation from '../../../../hooks/api/useConfirmReservation';
 import { toast } from 'react-toastify';
 
 export default function Rooms(props) {
