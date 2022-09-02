@@ -1,12 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Instructions, RoomsContainer, RoomContainer } from '../../../components/Dashboard/Hotel';
 import { Container, Row, Col } from 'react-grid-system';
+import useGetRooms from '../../../hooks/api/useGetRooms';
 
-export default function Rooms() {
-  const [rooms, setRooms] = useState([
-    { id: 1, beds: 4, number: 101, userRoom: [1, 2, 3] },
-    { id: 2, beds: 3, number: 102, userRoom: [1, 2] },
-  ]);
+export default function Rooms(props) {
+  const { getRooms } = useGetRooms();
+  const [rooms, setRooms] = useState([]);
   const [chosen, setChosen] = useState(0);
 
   const OccupiedIcon = (key) => {
@@ -25,13 +24,13 @@ export default function Rooms() {
     let vacancyArray = [];
     let isFull = false;
     let isChosen = false;
-    if (props.userRoom.length === props.beds) {
+    if (props.UserRoom.length === props.beds) {
       for (let i = 0; i < props.beds; i++) {
         vacancyArray.push(OccupiedIcon);
       }
       isFull = true;
     } else {
-      let available = props.beds - props.userRoom.length;
+      let available = props.beds - props.UserRoom.length;
       if (chosen === props.roomId) {
         available -= 1;
         isChosen = true;
@@ -42,7 +41,7 @@ export default function Rooms() {
       if (chosen === props.roomId) {
         vacancyArray.push(ChosenIcon);
       }
-      for (let i = 0; i < props.userRoom.length; i++) {
+      for (let i = 0; i < props.UserRoom.length; i++) {
         vacancyArray.push(OccupiedIcon);
       }
     }
@@ -54,6 +53,13 @@ export default function Rooms() {
     );
   };
 
+  useEffect(() => {
+    const promise = getRooms(props.hotelId);
+    promise.then((data) => {
+      setRooms(data);
+    });
+  }, []);
+
   return (
     <>
       <Instructions>Ótima pedida! Agora escolha seu quarto:</Instructions>
@@ -62,7 +68,7 @@ export default function Rooms() {
           <Row>
             {rooms.map((room) => (
               <Col key={room.number} xs={7} sm={6} md={4} lg={3}>
-                <Room beds={room.beds} number={room.number} userRoom={room.userRoom} roomId={room.id} />
+                <Room beds={room.beds} number={room.number} UserRoom={room.UserRoom} roomId={room.id} />
               </Col>
             ))}
           </Row>
