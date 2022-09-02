@@ -104,7 +104,7 @@ export default function Payment() {
       getUserTicket().then((response) => {
         setData({
           ticketId: response.ticketId || '',
-          hasHotel: response.userTicket.hasHotel || false,
+          hasHotel: response.userTicket?.hasHotel || false,
           isPaid: response.userTicket?.isPaid || false,
           id: response.userTicket?.id || null,
         });
