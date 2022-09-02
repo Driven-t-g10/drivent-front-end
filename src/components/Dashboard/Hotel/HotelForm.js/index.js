@@ -4,13 +4,11 @@ import useGetHotel from '../../../../hooks/api/useGetHotel';
 
 import { HotelOption, OptionsContainer } from '../index';
 import { Instructions } from '../../Payment';
+import Rooms from '../HotelRooms.js/Rooms';
 
 export default function HotelForm({ setBooked }) {
   const [hotels, setHotels] = useState([]);
-  const [chosen, setChosen] = useState({
-    hotelId: 0,
-    roomId: 0,
-  });
+  const [chosen, setChosen] = useState('');
 
   const { getHotel } = useGetHotel();
 
@@ -26,11 +24,7 @@ export default function HotelForm({ setBooked }) {
       <Instructions>Primeiro, escolha seu hotel</Instructions>
       <OptionsContainer>
         {hotels.map((hotel) => (
-          <HotelOption
-            key={hotel.id}
-            chosen={hotel.id === chosen.hotelId}
-            onClick={() => setChosen({ ...chosen, hotelId: hotel.id })}
-          >
+          <HotelOption key={hotel.id} chosen={hotel.id === chosen} onClick={() => setChosen(hotel.id)}>
             <img src={hotel.image} alt={hotel.name} />
             <p>{hotel.name}</p>
             <div>
@@ -48,6 +42,7 @@ export default function HotelForm({ setBooked }) {
           </HotelOption>
         ))}
       </OptionsContainer>
+      {chosen ? <Rooms hotelId={chosen} /> : <></>}
     </>
   );
 }
