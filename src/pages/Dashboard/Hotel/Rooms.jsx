@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
-import { Instructions, RoomsContainer, RoomContainer } from '../../../components/Dashboard/Hotel';
+import { Instructions, RoomsContainer, RoomContainer, ConfirmationButton } from '../../../components/Dashboard/Hotel';
 import { Container, Row, Col } from 'react-grid-system';
 import useGetRooms from '../../../hooks/api/useGetRooms';
+import useConfirmReservation from '../../../hooks/api/useConfirmReservation';
+import { toast } from 'react-toastify';
 
 export default function Rooms(props) {
   const { getRooms } = useGetRooms();
+  const { confirmReservation } = useConfirmReservation();
   const [rooms, setRooms] = useState([]);
   const [chosen, setChosen] = useState(0);
 
@@ -53,6 +56,15 @@ export default function Rooms(props) {
     );
   };
 
+  const handleConfirmation = () => {
+    try {
+      confirmReservation(chosen);
+      toast('Reserva confirmada com sucesso!');
+    } catch (error) {
+      toast('Erro ao confirmar reserva!');
+    }
+  };
+
   useEffect(() => {
     const promise = getRooms(props.hotelId);
     promise.then((data) => {
@@ -74,6 +86,7 @@ export default function Rooms(props) {
           </Row>
         </Container>
       </RoomsContainer>
+      {chosen ? <ConfirmationButton onClick={handleConfirmation}>RESERVAR QUARTO</ConfirmationButton> : <></>}
     </>
   );
 }
