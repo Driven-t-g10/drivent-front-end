@@ -66,11 +66,13 @@ export default function Rooms(props) {
   };
 
   useEffect(() => {
-    const promise = getRooms(props.hotelId);
-    promise.then((data) => {
-      setRooms(data);
-    });
-  }, []);
+    if (props.hotelId) {
+      const promise = getRooms(props.hotelId);
+      promise.then((data) => {
+        setRooms(data);
+      });
+    }
+  }, [props.hotelId]);
 
   return (
     <>
