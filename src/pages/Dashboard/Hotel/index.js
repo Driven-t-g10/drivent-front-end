@@ -30,7 +30,11 @@ export default function Hotel() {
   return (
     <>
       <Title>Escolha de hotel e quarto</Title>
-      {userRoom && booked ? <UserRoom userRoom={userRoom} /> : <HotelForm setBooked={setBooked} />}
+      {userRoom && booked ? (
+        <UserRoom userRoom={userRoom} setUserRoom={setUserRoom} />
+      ) : (
+        <HotelForm setBooked={setBooked} userRoom={userRoom} />
+      )}
     </>
   );
 }
