@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useState } from 'react';
 import HotelForm from '../../../components/Dashboard/Hotel/HotelForm.js';
+import UserRoom from '../../../components/Dashboard/Hotel/UserRoom.js/index.js';
 import { Title } from '../../../components/Dashboard/Payment';
 import useGetUserRoom from '../../../hooks/api/useGetUserRoom';
 import useGetUserTicket from '../../../hooks/api/useGetUserTicket';
@@ -20,6 +21,7 @@ export default function Hotel() {
       if (response.userTicket.isPaid && response.userTicket.hasHotel) {
         getUserRoom().then((response) => {
           setUserRoom(response);
+          setBooked(true);
         });
       }
     });
@@ -28,7 +30,7 @@ export default function Hotel() {
   return (
     <>
       <Title>Escolha de hotel e quarto</Title>
-      {userRoom && booked ? <></> : <HotelForm setBooked={setBooked} />}
+      {userRoom && booked ? <UserRoom userRoom={userRoom} /> : <HotelForm setBooked={setBooked} />}
     </>
   );
 }

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import useGetHotel from '../../../../hooks/api/useGetHotel';
 
 import { HotelOption, OptionsContainer } from '../index';
-import { Instructions } from '../../Payment';
+import { Instructions } from '../index';
 import Rooms from '../HotelRooms.js/Rooms';
 
 export default function HotelForm({ setBooked }) {
@@ -19,6 +19,19 @@ export default function HotelForm({ setBooked }) {
     });
   }, []);
 
+  function showRoomTypes(roomTypes) {
+    let types = roomTypes[0];
+    for (let i = 1; i < roomTypes.length; i++) {
+      if (i === roomTypes.length - 1) {
+        types += ` e ${roomTypes[i]}`;
+      } else {
+        types += `, ${roomTypes[i]}`;
+      }
+    }
+
+    return types;
+  }
+
   return (
     <>
       <Instructions>Primeiro, escolha seu hotel</Instructions>
@@ -31,13 +44,13 @@ export default function HotelForm({ setBooked }) {
               <p>
                 <span>Tipos de acomodação:</span>
               </p>
-              <p>Single e Double</p>
+              <p>{showRoomTypes(hotel.roomTypes)}</p>
             </div>
             <div>
               <p>
                 <span>Vagas disponíveis:</span>
               </p>
-              <p>{hotel.spaces - hotel.occupied}</p>
+              <p>{hotel.spaces}</p>
             </div>
           </HotelOption>
         ))}
