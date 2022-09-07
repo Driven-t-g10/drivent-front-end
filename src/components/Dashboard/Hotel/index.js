@@ -117,3 +117,16 @@ export const OptionsContainer = styled.section`
   display: flex;
   flex-wrap: wrap;
 `;
+
+export const Alert = styled.p`
+  font-family: 'Roboto, sans-serif';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 23px;
+  text-align: center;
+  color: #8e8e8e;
+  width: 464px;
+  margin: 0 auto;
+  margin-top: 205px;
+`;

@@ -7,9 +7,13 @@ export async function signIn(email, password) {
 }
 
 export async function signOauth(code) {
-  const response = await api.post(`/auth/oauth/${code}`);
-  console.log(response);
-  return response.data;
+  try {
+    const response = await api.post(`/auth/oauth/${code}`);
+    console.log(response);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 export async function githubAuthorization() {
