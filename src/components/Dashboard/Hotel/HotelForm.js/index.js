@@ -6,7 +6,7 @@ import { HotelOption, OptionsContainer } from '../index';
 import { Instructions } from '../index';
 import Rooms from '../HotelRooms.js/Rooms';
 
-export default function HotelForm({ setBooked }) {
+export default function HotelForm({ setBooked, userRoom }) {
   const [hotels, setHotels] = useState([]);
   const [chosen, setChosen] = useState('');
 
@@ -55,7 +55,7 @@ export default function HotelForm({ setBooked }) {
           </HotelOption>
         ))}
       </OptionsContainer>
-      {chosen ? <Rooms hotelId={chosen} /> : <></>}
+      {chosen ? <Rooms hotelId={chosen} setBooked={setBooked} /> : <></>}
     </>
   );
 }

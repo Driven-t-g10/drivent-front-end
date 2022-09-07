@@ -1,6 +1,6 @@
 import { ConfirmationButton, HotelOption, Instructions } from '..';
 
-export default function UserRoom({ userRoom }) {
+export default function UserRoom({ userRoom, setUserRoom }) {
   const hotel = userRoom.Room.Hotel;
   const room = userRoom.Room;
 
@@ -36,7 +36,7 @@ export default function UserRoom({ userRoom }) {
           <p>{showPeopleInYourRoom(room._count.UserRoom)}</p>
         </div>
       </HotelOption>
-      <ConfirmationButton>TROCAR DE QUARTO</ConfirmationButton>
+      <ConfirmationButton onClick={() => setUserRoom(false)}>TROCAR DE QUARTO</ConfirmationButton>
     </>
   );
 }
