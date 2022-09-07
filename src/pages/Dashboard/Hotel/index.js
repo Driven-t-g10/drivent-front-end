@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useState } from 'react';
 import HotelForm from '../../../components/Dashboard/Hotel/HotelForm.js';
+import { Alert } from '../../../components/Dashboard/Hotel/index.js';
 import UserRoom from '../../../components/Dashboard/Hotel/UserRoom.js/index.js';
 import { Title } from '../../../components/Dashboard/Payment';
 import useGetUserRoom from '../../../hooks/api/useGetUserRoom';
@@ -18,19 +19,30 @@ export default function Hotel() {
     const promise = getUserTicket();
     promise.then((response) => {
       setUserTicket(response.userTicket);
-      if (response.userTicket.isPaid && response.userTicket.hasHotel) {
+      if (response.userTicket?.isPaid && response.userTicket?.hasHotel) {
         getUserRoom().then((response) => {
           setUserRoom(response);
           setBooked(true);
         });
       }
     });
-  }, [booked]);
+  }, []);
+
+  function showPage() {
+    if (!userTicket || !userTicket?.isPaid)
+      return (
+        <Alert>Você precisa ter confirmado pagamento antes de fazer a escolha de fazer a escolha de hospedagem</Alert>
+      );
+    if (!userTicket?.hasHotel)
+      return <Alert>Sua modalidade de ingresso não inclui hospedagem Prossiga para a escolha de atividades</Alert>;
+    if (!userRoom && booked) return <HotelForm setBooked={setBooked} />;
+    if (userRoom && booked) return <UserRoom userRoom={userRoom} />;
+  }
 
   return (
     <>
       <Title>Escolha de hotel e quarto</Title>
-      {userRoom && booked ? <UserRoom userRoom={userRoom} /> : <HotelForm setBooked={setBooked} />}
+      {showPage()}
     </>
   );
 }
