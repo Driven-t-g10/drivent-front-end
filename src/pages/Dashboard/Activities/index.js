@@ -31,7 +31,6 @@ export default function Activities() {
   return (
     <>
       <Title>Escolha de atividades</Title>
-      <ActivitiesList date={'Sexta, 22/10'} />
       {showPage()}
     </>
   );

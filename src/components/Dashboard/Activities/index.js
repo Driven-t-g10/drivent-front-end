@@ -35,6 +35,8 @@ export const ActivityContainer = styled.div`
   border-radius: 5px;
   margin-top: 10px;
   align-items: center;
+  pointer-events: ${(props) => (props.full ? 'none' : 'auto')};
+  cursor: pointer;
 
   > div:first-child {
     display: flex;
