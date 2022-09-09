@@ -98,4 +98,14 @@ export const ActivityContainer = styled.div`
 
 export const Container = styled.div`
   display: flex;
+  margin-top: 30px;
+`;
+
+export const Title = styled.h1`
+  font-style: normal;
+  font-weight: 400;
+  font-size: 34px;
+  line-height: 40px;
+  color: #000000;
+  margin-bottom: 26px;
 `;
