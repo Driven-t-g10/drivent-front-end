@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useState } from 'react';
+import ActivitiesInfo from '../../../components/Dashboard/Activity/ActivitiesInfo/index.js';
 import { Alert } from '../../../components/Dashboard/Hotel/index.js';
 import { Title } from '../../../components/Dashboard/Payment';
 import useGetUserTicket from '../../../hooks/api/useGetUserTicket';
@@ -26,6 +27,8 @@ export default function Activities() {
           Sua modalidade de ingresso não necessita escolher atividade. Você terá acesso a todas as atividades.
         </Alert>
       );
+
+    return <ActivitiesInfo />;
   }
 
   return (
