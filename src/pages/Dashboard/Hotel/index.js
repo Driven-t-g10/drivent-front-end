@@ -36,7 +36,7 @@ export default function Hotel() {
     if (!userTicket?.hasHotel)
       return <Alert>Sua modalidade de ingresso não inclui hospedagem Prossiga para a escolha de atividades</Alert>;
     if (!userRoom && booked) return <HotelForm setBooked={setBooked} />;
-    if (userRoom && booked) return <UserRoom userRoom={userRoom} />;
+    if (userRoom && booked) return <UserRoom userRoom={userRoom} setUserRoom={setUserRoom} />;
   }
 
   return (

@@ -20,7 +20,7 @@ export const Instructions = styled.p`
   margin-bottom: 17px;
 `;
 
-export const DayButton = styled.button`
+export const DateButton = styled.button`
   width: 131px;
   height: 37px;
   background-color: #e0e0e0;
