@@ -58,7 +58,6 @@ export default function Rooms(props) {
       }
       if (chosen !== props.roomId) {
         for (let i = 0; i < props.UserRoom.length; i++) {
-          console.log(props.UserRoom[i]);
           if (props.UserRoom[i].userId === userData.user.id) available += 1;
         }
       }
@@ -72,7 +71,6 @@ export default function Rooms(props) {
         if (!(props.UserRoom[i].userId === userData.user.id)) vacancyArray.push(OccupiedIcon);
       }
     }
-    console.log(vacancyArray);
     return (
       <RoomContainer isFull={isFull} chosen={isChosen} onClick={() => setChosen(props.roomId)}>
         <p>{props.number}</p>
@@ -85,6 +83,7 @@ export default function Rooms(props) {
     try {
       confirmReservation(chosen);
       props.setBooked(true);
+      props.setLoading(true);
       toast('Reserva confirmada com sucesso!');
     } catch (error) {
       toast('Erro ao confirmar reserva!');
@@ -92,18 +91,15 @@ export default function Rooms(props) {
   };
 
   useEffect(() => {
-    // console.log(userData);
     if (props.hotelId) {
       const promise = getRooms(props.hotelId);
       promise.then((data) => {
         setRooms(data);
-        console.log(data);
 
         for (let i = 0; i < data.length && chosen === 0; i++) {
           if (data[i].UserRoom.length) {
             for (let j = 0; j < data[i].UserRoom.length; j++) {
               if (data[i].UserRoom[j].userId === userData.user.id) {
-                console.log('entrou');
                 setChosen(data[i].UserRoom[j].roomId);
               }
             }
