@@ -13,7 +13,7 @@ export default function ActivitiesInfo() {
     promise.then((response) => {
       setDate(response);
     });
-  }, []);
+  }, [chosen]);
 
   return (
     <>
