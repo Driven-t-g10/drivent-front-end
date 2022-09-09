@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import useGetActivitiesDates from '../../../../hooks/api/useGetActivitiesDates';
+import ActivitiesList from '../../Activities/ActivitiesList';
 import { DateButton, Instructions } from '../index';
 
 export default function ActivitiesInfo() {
@@ -22,6 +23,7 @@ export default function ActivitiesInfo() {
           {date.date}
         </DateButton>
       ))}
+      {chosen ? <ActivitiesList date={chosen} /> : <></>}
     </>
   );
 }

@@ -1,4 +1,4 @@
-import api from './api.js';
+import api, { parseToken } from './api.js';
 
 export async function getPlaces(token) {
   const response = await api.get('/activities/places', {
@@ -15,5 +15,11 @@ export async function getActivities(place, date, token) {
       Authorization: `Bearer ${token}`,
     },
   });
+  return response.data;
+}
+
+export async function getActivitiesDates(token) {
+  const response = await api.get('/activities/dates', parseToken(token));
+
   return response.data;
 }

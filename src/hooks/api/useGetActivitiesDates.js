@@ -1,7 +1,7 @@
 import useAsync from '../useAsync';
 import useToken from '../useToken';
 
-import * as activityApi from '../../services/activityApi';
+import * as activitiesApi from '../../services/activitiesApi';
 
 export default function useGetActivitiesDates() {
   const token = useToken();
@@ -11,7 +11,7 @@ export default function useGetActivitiesDates() {
     loading: datesLoading,
     error: datesError,
     act: getActivitiesDates,
-  } = useAsync(() => activityApi.getActivitiesDates(token));
+  } = useAsync(() => activitiesApi.getActivitiesDates(token));
 
   return {
     dates,
