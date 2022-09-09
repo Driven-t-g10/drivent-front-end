@@ -17,9 +17,9 @@ export default function ActivitiesInfo() {
 
   return (
     <>
-      <Instructions>Primeiro, filtre pelo dia do evento:</Instructions>
+      {chosen ? <></> : <Instructions>Primeiro, filtre pelo dia do evento:</Instructions>}
       {dates.map((date) => (
-        <DateButton key={date.date} onClick={() => setChosen(date.date)}>
+        <DateButton chosen={chosen === date.date ? true : false} key={date.date} onClick={() => setChosen(date.date)}>
           {date.date}
         </DateButton>
       ))}

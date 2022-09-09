@@ -18,12 +18,13 @@ export const Instructions = styled.p`
   line-height: 23px;
   color: #8e8e8e;
   margin-bottom: 17px;
+  margin-top: 10px;
 `;
 
 export const DateButton = styled.button`
   width: 131px;
   height: 37px;
-  background-color: #e0e0e0;
+  background-color: ${(props) => (props.chosen ? '#FFD37D' : '#e0e0e0')};
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.25);
   border-radius: 4px;
   border: none;
