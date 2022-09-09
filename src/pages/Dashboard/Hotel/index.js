@@ -11,6 +11,7 @@ export default function Hotel() {
   const [userTicket, setUserTicket] = useState(null);
   const [userRoom, setUserRoom] = useState(null);
   const [booked, setBooked] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const { getUserTicket } = useGetUserTicket();
   const { getUserRoom } = useGetUserRoom();
@@ -23,10 +24,11 @@ export default function Hotel() {
         getUserRoom().then((response) => {
           setUserRoom(response);
           setBooked(true);
+          setLoading(false);
         });
       }
     });
-  }, []);
+  }, [loading]);
 
   function showPage() {
     if (!userTicket || !userTicket?.isPaid)
@@ -35,14 +37,14 @@ export default function Hotel() {
       );
     if (!userTicket?.hasHotel)
       return <Alert>Sua modalidade de ingresso não inclui hospedagem Prossiga para a escolha de atividades</Alert>;
-    if (!userRoom && booked) return <HotelForm setBooked={setBooked} />;
-    if (userRoom && booked) return <UserRoom userRoom={userRoom} setUserRoom={setUserRoom} />;
+    if (!userRoom && booked) return <HotelForm setLoading={setLoading} setBooked={setBooked} />;
   }
 
   return (
     <>
       <Title>Escolha de hotel e quarto</Title>
       {showPage()}
+      {userRoom && booked ? <UserRoom userRoom={userRoom} setUserRoom={setUserRoom} /> : <></>}
     </>
   );
 }
