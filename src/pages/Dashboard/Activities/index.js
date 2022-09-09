@@ -1,3 +1,9 @@
+import { Title } from '../../../components/Dashboard/Activity';
+
 export default function Activities() {
-  return 'Atividades: Em breve!';
+  return (
+    <>
+      <Title>Escolha de atividades</Title>
+    </>
+  );
 }
