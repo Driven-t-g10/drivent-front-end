@@ -4,6 +4,7 @@ import ActivitiesInfo from '../../../components/Dashboard/Activity/ActivitiesInf
 import { Alert } from '../../../components/Dashboard/Hotel/index.js';
 import { Title } from '../../../components/Dashboard/Payment';
 import useGetUserTicket from '../../../hooks/api/useGetUserTicket';
+import ActivitiesList from '../../../components/Dashboard/Activities/ActivitiesList';
 
 export default function Activities() {
   const [userTicket, setUserTicket] = useState(null);
