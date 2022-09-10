@@ -1,11 +1,15 @@
 import { ActivityContainer } from './index.js';
 import { useState, useEffect } from 'react';
 import useGetActivities from '../../../hooks/api/useGetActivities.js';
+import useSaveUserSchedule from '../../../hooks/api/useSaveUserSchedule.js';
+import { toast } from 'react-toastify';
 
 export default function Activities(props) {
   const { place, date } = props;
   const { getActivities } = useGetActivities();
+  const { saveUserSchedule } = useSaveUserSchedule();
   const [activities, setActivities] = useState([]);
+  const [isSubscribed, setIsSubscribed] = useState(false);
 
   function getActivityDuration(startTime, endTime) {
     let start = new Date();
@@ -18,42 +22,79 @@ export default function Activities(props) {
     return duration;
   }
 
+  function handleState(isRegistered, isFull, vacancies, scheduleId) {
+    const hasNoVacancies = (
+      <>
+        <ion-icon name="close-circle-outline"></ion-icon>
+        <p>Esgotado</p>
+      </>
+    );
+
+    const hasVacancies = (
+      <>
+        <ion-icon name="enter-outline" onClick={handleSaveUserSchedule(scheduleId)}></ion-icon>
+        <p>{vacancies} vagas</p>
+      </>
+    );
+
+    const isChosen = (
+      <>
+        <ion-icon name="checkmark-circle-outline"></ion-icon>
+        <p>inscrito</p>
+      </>
+    );
+
+    if (isRegistered) return isChosen;
+    return isFull ? hasNoVacancies : hasVacancies;
+  }
+
+  function handleSaveUserSchedule(scheduleId) {
+    return () => {
+      const promise = saveUserSchedule(scheduleId);
+      promise.then((res) => {
+        toast('Inscrito com sucesso!');
+        setIsSubscribed(true);
+      });
+      promise.catch((error) => {
+        toast.error(error.response.data.message);
+      });
+    };
+  }
+
   useEffect(() => {
     getActivities(place, date).then((res) => {
       setActivities(res);
     });
-  }, []);
+  }, [date, isSubscribed]);
   return (
     <>
       {activities.map((activity) => {
-        const duration = getActivityDuration(activity.Schedule[0].startTime, activity.Schedule[0].endTime);
-        const time = `${activity.Schedule[0].startTime} - ${activity.Schedule[0].endTime}`;
-        const subscribedUsers = activity.Schedule[0].UserActivity.length;
-        const vacancies = activity.vacancy - subscribedUsers;
-        let isFull = false;
-        if (vacancies === 0) isFull = true;
-        return (
-          <ActivityContainer duration={duration} key={activity.id} full={isFull}>
-            <div>
-              <h1>{activity.name}</h1>
-              <h2>{time}</h2>
-            </div>
-            <div />
-            <div>
-              {isFull ? (
-                <>
-                  <ion-icon name="close-circle-outline"></ion-icon>
-                  <p>Esgotado</p>
-                </>
-              ) : (
-                <>
-                  <ion-icon name="enter-outline"></ion-icon>
-                  <p>{vacancies} vagas</p>
-                </>
-              )}
-            </div>
-          </ActivityContainer>
-        );
+        const scheduleList = [];
+        for (let i = 0; i < activity.Schedule.length; i++) {
+          const duration = getActivityDuration(activity.Schedule[i].startTime, activity.Schedule[i].endTime);
+          const time = `${activity.Schedule[i].startTime} - ${activity.Schedule[i].endTime}`;
+          const subscribedUsers = activity.Schedule[i].UserActivity;
+          const vacancies = activity.vacancy - subscribedUsers.length;
+          let isFull = false;
+          const { isRegistered } = activity.Schedule[i];
+          if (vacancies === 0) isFull = true;
+          scheduleList.push(
+            <ActivityContainer
+              duration={duration}
+              key={activity.Schedule[i].id}
+              full={isFull}
+              isRegistered={isRegistered}
+            >
+              <div>
+                <h1>{activity.name}</h1>
+                <h2>{time}</h2>
+              </div>
+              <div />
+              <div>{handleState(isRegistered, isFull, vacancies, activity.Schedule[i].id)}</div>
+            </ActivityContainer>
+          );
+        }
+        return scheduleList;
       })}
     </>
   );

@@ -12,7 +12,7 @@ export default function ActivitiesList(props) {
     getPlaces().then((res) => {
       setPlaces(res);
     });
-  }, []);
+  }, [date]);
   return (
     <Container>
       {places.map((place) => {

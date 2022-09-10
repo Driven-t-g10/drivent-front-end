@@ -31,11 +31,11 @@ export const ActivityContainer = styled.div`
   display: flex;
   width: 265px;
   height: ${(props) => (props.duration ? `${props.duration * 80}px` : '80px')};
-  background: #f1f1f1;
+  background: ${(props) => (props.isRegistered ? '#D0FFDB' : '#F1F1F1')};
   border-radius: 5px;
   margin-top: 10px;
   align-items: center;
-  pointer-events: ${(props) => (props.full ? 'none' : 'auto')};
+  pointer-events: ${(props) => (props.isRegistered ? 'none' : props.full ? 'none' : 'auto')};
   cursor: pointer;
 
   > div:first-child {
@@ -49,7 +49,7 @@ export const ActivityContainer = styled.div`
 
   > div:nth-child(2) {
     height: 90%;
-    border: 1px solid #cfcfcf;
+    border: ${(props) => (props.isRegistered ? '1px solid #99E8A1' : '1px solid #cfcfcf')};
     background: #cfcfcf;
     margin-left: 16px;
     margin-right: 10px;
@@ -65,11 +65,11 @@ export const ActivityContainer = styled.div`
 
     ion-icon {
       font-size: 20px;
-      color: ${(props) => (props.full ? '#CC6666' : '#078632')};
+      color: ${(props) => (props.isRegistered ? '#078632' : props.full ? '#CC6666' : '#078632')};
     }
 
     p {
-      color: ${(props) => (props.full ? '#CC6666' : '#078632')};
+      color: ${(props) => (props.isRegistered ? '#078632' : props.full ? '#CC6666' : '#078632')};
       font-style: normal;
       font-weight: 400;
       font-size: 9px;
