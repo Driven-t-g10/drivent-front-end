@@ -9,6 +9,7 @@ export default function Activities(props) {
   const { getActivities } = useGetActivities();
   const { saveUserSchedule } = useSaveUserSchedule();
   const [activities, setActivities] = useState([]);
+  const [isSubscribed, setIsSubscribed] = useState(false);
 
   function getActivityDuration(startTime, endTime) {
     let start = new Date();
@@ -31,7 +32,7 @@ export default function Activities(props) {
 
     const hasVacancies = (
       <>
-        <ion-icon name="enter-outline" onClick={handleSaveUserSchedule(scheduleId)} ></ion-icon>
+        <ion-icon name="enter-outline" onClick={handleSaveUserSchedule(scheduleId)}></ion-icon>
         <p>{vacancies} vagas</p>
       </>
     );
@@ -43,19 +44,20 @@ export default function Activities(props) {
       </>
     );
 
-    if(isRegistered) return isChosen;
-    return isFull ? (hasNoVacancies) : (hasVacancies);
+    if (isRegistered) return isChosen;
+    return isFull ? hasNoVacancies : hasVacancies;
   }
-  
+
   function handleSaveUserSchedule(scheduleId) {
     return () => {
-      try {
-        saveUserSchedule(scheduleId).then((res) => {
-          toast.success('Activity added to your schedule');
-        });
-      } catch (error) {
-        toast.error(error.message);
-      }
+      const promise = saveUserSchedule(scheduleId);
+      promise.then((res) => {
+        toast('Inscrito com sucesso!');
+        setIsSubscribed(true);
+      });
+      promise.catch((error) => {
+        toast.error(error.response.data.message);
+      });
     };
   }
 
@@ -63,29 +65,32 @@ export default function Activities(props) {
     getActivities(place, date).then((res) => {
       setActivities(res);
     });
-  }, []);
+  }, [date, isSubscribed]);
   return (
     <>
       {activities.map((activity) => {
         const scheduleList = [];
-        for(let i = 0; i < activity.Schedule.length; i++) {
+        for (let i = 0; i < activity.Schedule.length; i++) {
           const duration = getActivityDuration(activity.Schedule[i].startTime, activity.Schedule[i].endTime);
           const time = `${activity.Schedule[i].startTime} - ${activity.Schedule[i].endTime}`;
-          const subscribedUsers = activity.Schedule[i].UserActivity.length;
-          const vacancies = activity.vacancy - subscribedUsers;
+          const subscribedUsers = activity.Schedule[i].UserActivity;
+          const vacancies = activity.vacancy - subscribedUsers.length;
           let isFull = false;
           const { isRegistered } = activity.Schedule[i];
           if (vacancies === 0) isFull = true;
           scheduleList.push(
-            <ActivityContainer duration={duration} key={activity.Schedule[i].id} full={isFull}>
+            <ActivityContainer
+              duration={duration}
+              key={activity.Schedule[i].id}
+              full={isFull}
+              isRegistered={isRegistered}
+            >
               <div>
                 <h1>{activity.name}</h1>
                 <h2>{time}</h2>
               </div>
               <div />
-              <div>
-                {handleState(isRegistered, isFull, vacancies, activity.Schedule[i].id)}
-              </div>
+              <div>{handleState(isRegistered, isFull, vacancies, activity.Schedule[i].id)}</div>
             </ActivityContainer>
           );
         }
